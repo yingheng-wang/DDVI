@@ -1,0 +1,12 @@
+# H-AEVB: hierarchical posterior q(z1|x) q(z2|x, z1), both with IAF layers
+name: h_aevb
+batch_size: 128
+lr: 0.0001
+num_epochs: 200
+hidden_size: 1000
+latent_size: 2
+bn: false
+kld_weight: 0.005
+kld_schedule: linear
+context_size: 10
+p_weight: 0.5

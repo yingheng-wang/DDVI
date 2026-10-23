@@ -1,0 +1,14 @@
+# Semi-supervised DDVI (simplified, one x-independent denoiser per partition; Tables 2, 8)
+name: ddvi_semi
+batch_size: 128
+lr: 0.0001
+num_epochs: 50
+hidden_size: 1000
+latent_size: 2
+bn: false
+kld_weight: 0.01        # 0.5 for CIFAR-10 (Table 8, see scripts/); the classification weight is cls_weight * kld_weight
+kld_schedule: constant
+cls_weight: 1
+timesteps: 100
+warmup_iters: 100000    # warm-up of the x-independent denoiser(s) on prior samples (batch 128, lr 0.001)
+denoiser_dir: null      # reuse the warmed-up partition denoisers (diff_model<l>.pt) of an earlier run with the same prior

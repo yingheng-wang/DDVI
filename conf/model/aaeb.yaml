@@ -1,0 +1,8 @@
+# AAEB: adversarial autoencoder (100 epochs on CIFAR-10, see scripts/)
+name: aaeb
+batch_size: 128
+lr: 0.0002
+num_epochs: 200
+hidden_size: 1000
+latent_size: 2
+bn: false

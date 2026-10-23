@@ -1,0 +1,21 @@
+defaults:
+  - _self_
+  - dataset: mnist
+  - model: ddvi
+  - prior: pinwheel
+
+seed: 0
+data_dir: ./data
+run_root: ./runs
+tag: ''                 # appended to the model name in save_folder (e.g. for ablations)
+save_folder: ${run_root}/${dataset.name}/${model.name}${tag}/${prior.name}/seed${seed}
+val_split: 0            # > 0: hold out this many training images as a validation set that replaces the test set
+eval_every: 0           # > 0: also compute the metrics every eval_every epochs (metrics_history.jsonl)
+num_workers: 2
+
+hydra:
+  run:
+    dir: ${save_folder}
+  output_subdir: null
+  job:
+    chdir: false

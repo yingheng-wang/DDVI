@@ -1,0 +1,27 @@
+# DDVI with an x-conditional reverse process trained by wake-sleep (Tables 1, 7, 9)
+name: ddvi
+batch_size: 128
+lr: 0.0001
+num_epochs: 100
+hidden_size: 1000
+latent_size: 2
+bn: false
+dropout: 0.2            # encoder / decoder dropout (training only)
+kld_weight: 0.003
+kld_schedule: constant
+# reverse process
+timesteps: 20
+ab_T: 0.5               # alpha_bar_T of the forward process on the standardized latent
+context_size: 64
+den_hidden: 256
+den_blocks: 4
+clip_u: 5.0
+# sleep
+sleep_ct: 1             # sleep steps per wake step (0: no sleep term, Table 9)
+sleep_lr: 0.0003
+uncond_prob: 0.1
+yT_weight: 0.05
+# initialization
+init_from: ${run_root}/${dataset.name}/ddvi_simplified/${prior.name}/seed${seed}/model.pt
+pretrain_iters: 50000
+freeze_P_epochs: 30

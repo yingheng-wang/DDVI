@@ -1,0 +1,12 @@
+# semi-supervised AEVB; the classification weight is cls_weight * kld_weight
+name: aevb_semi
+batch_size: 128
+lr: 0.0001
+num_epochs: 50
+hidden_size: 1000
+latent_size: 2
+bn: false
+kld_weight: 0.01        # 0.5 for CIFAR-10 (Table 8, see scripts/)
+kld_schedule: constant
+p_weight: 5
+cls_weight: 1

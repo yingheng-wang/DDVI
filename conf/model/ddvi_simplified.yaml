@@ -1,0 +1,14 @@
+# Simplified DDVI (x-independent reverse process); first training stage of `ddvi`
+name: ddvi_simplified
+batch_size: 128
+lr: 0.0001
+num_epochs: 100
+hidden_size: 1000
+latent_size: 2
+bn: false
+kld_weight: 0.01
+kld_schedule: constant
+diff_weight: 1          # weight of the denoising loss on prior samples
+timesteps: 20
+warmup_iters: 100000    # warm-up of the x-independent denoiser(s) on prior samples (batch 128, lr 0.001)
+denoiser_dir: null      # reuse the warmed-up prior denoiser (diff_model.pt) of an earlier run with the same prior
