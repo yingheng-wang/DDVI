@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: Please cite the accompanying paper if you use this code.
+title: 'Denoising Diffusion Variational Inference: Diffusion Models as Expressive Variational Posteriors'
+type: software
+repository-code: 'https://github.com/yingheng-wang/DDVI'
+license: MIT
+authors:
+  - family-names: Wang
+    given-names: Yingheng
+  - family-names: Piriyakulkij
+    given-names: Wasu Top
+  - family-names: Kuleshov
+    given-names: Volodymyr
+preferred-citation:
+  type: conference-paper
+  title: 'Denoising Diffusion Variational Inference: Diffusion Models as Expressive Variational Posteriors'
+  authors:
+    - family-names: Piriyakulkij
+      given-names: Wasu Top
+    - family-names: Wang
+      given-names: Yingheng
+    - family-names: Kuleshov
+      given-names: Volodymyr
+  collection-title: 'Proceedings of the AAAI Conference on Artificial Intelligence'
+  year: 2025
+  url: 'https://arxiv.org/abs/2401.02739'

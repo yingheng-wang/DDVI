@@ -1,0 +1,920 @@
+{
+ "note": "Numbers reported in the paper: mean and 95% t-interval half-width over seeds. ELBO in nats per image (evaluation conventions in the paper, Sec. 5.1); Acc = 20-NN accuracy; Latent NLL and MMD lower is better.",
+ "table1_mnist_unsupervised": {
+  "description": "Unsupervised MNIST (3 seeds)",
+  "methods": {
+   "AEVB": {
+    "pinwheel": {
+     "elbo": [
+      -169.9,
+      1.9
+     ],
+     "mmd": [
+      0.73,
+      0.06
+     ],
+     "latent_nll": [
+      1.55,
+      0.59
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -174.6,
+      2.8
+     ],
+     "mmd": [
+      0.74,
+      0.15
+     ],
+     "latent_nll": [
+      5.63,
+      1.72
+     ]
+    },
+    "square": {
+     "elbo": [
+      -172.4,
+      1.2
+     ],
+     "mmd": [
+      1.0,
+      0.27
+     ],
+     "latent_nll": [
+      2.93,
+      1.11
+     ]
+    }
+   },
+   "AEVB-IAF": {
+    "pinwheel": {
+     "elbo": [
+      -159.7,
+      5.1
+     ],
+     "mmd": [
+      0.76,
+      0.06
+     ],
+     "latent_nll": [
+      1.29,
+      0.4
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -170.7,
+      17.9
+     ],
+     "mmd": [
+      0.76,
+      0.21
+     ],
+     "latent_nll": [
+      3.7,
+      1.97
+     ]
+    },
+    "square": {
+     "elbo": [
+      -160.2,
+      6.7
+     ],
+     "mmd": [
+      0.77,
+      0.16
+     ],
+     "latent_nll": [
+      1.72,
+      0.1
+     ]
+    }
+   },
+   "AAEB": {
+    "pinwheel": {
+     "elbo": null,
+     "mmd": [
+      0.68,
+      0.02
+     ],
+     "latent_nll": [
+      1.54,
+      0.13
+     ]
+    },
+    "swiss_roll": {
+     "elbo": null,
+     "mmd": [
+      0.54,
+      0.04
+     ],
+     "latent_nll": [
+      3.34,
+      0.24
+     ]
+    },
+    "square": {
+     "elbo": null,
+     "mmd": [
+      0.85,
+      0.18
+     ],
+     "latent_nll": [
+      2.27,
+      0.87
+     ]
+    }
+   },
+   "H-AEVB": {
+    "pinwheel": {
+     "elbo": [
+      -154.6,
+      4.0
+     ],
+     "mmd": [
+      0.73,
+      0.07
+     ],
+     "latent_nll": [
+      1.54,
+      0.11
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -158.2,
+      6.0
+     ],
+     "mmd": [
+      0.64,
+      0.05
+     ],
+     "latent_nll": [
+      2.92,
+      0.45
+     ]
+    },
+    "square": {
+     "elbo": [
+      -155.8,
+      7.1
+     ],
+     "mmd": [
+      0.75,
+      0.12
+     ],
+     "latent_nll": [
+      1.67,
+      0.04
+     ]
+    }
+   },
+   "PIS (reimplementation)": {
+    "pinwheel": {
+     "elbo": [
+      -192.6,
+      8.2
+     ],
+     "mmd": [
+      1.15,
+      0.04
+     ],
+     "latent_nll": [
+      2.13,
+      0.65
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -216.6,
+      0.2
+     ],
+     "mmd": [
+      1.09,
+      0.02
+     ],
+     "latent_nll": [
+      6.19,
+      0.13
+     ]
+    },
+    "square": {
+     "elbo": [
+      -204.6,
+      0.4
+     ],
+     "mmd": [
+      1.49,
+      0.04
+     ],
+     "latent_nll": [
+      3.68,
+      0.07
+     ]
+    }
+   },
+   "DDVI": {
+    "pinwheel": {
+     "elbo": [
+      -151.5,
+      2.7
+     ],
+     "mmd": [
+      0.7,
+      0.08
+     ],
+     "latent_nll": [
+      1.11,
+      0.1
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -155.9,
+      1.5
+     ],
+     "mmd": [
+      0.69,
+      0.05
+     ],
+     "latent_nll": [
+      2.27,
+      0.16
+     ]
+    },
+    "square": {
+     "elbo": [
+      -146.6,
+      2.4
+     ],
+     "mmd": [
+      0.64,
+      0.03
+     ],
+     "latent_nll": [
+      1.56,
+      0.01
+     ]
+    }
+   }
+  }
+ },
+ "table2_mnist_semi_supervised": {
+  "description": "Semi-supervised MNIST, 1,000 labels (10 seeds)",
+  "methods": {
+   "AEVB": {
+    "pinwheel": {
+     "elbo": [
+      -180.7,
+      0.5
+     ],
+     "acc": [
+      0.85,
+      0.02
+     ],
+     "latent_nll": [
+      1.59,
+      0.03
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -200.0,
+      2.0
+     ],
+     "acc": [
+      0.49,
+      0.02
+     ],
+     "latent_nll": [
+      5.37,
+      0.22
+     ]
+    },
+    "square": {
+     "elbo": [
+      -191.2,
+      2.5
+     ],
+     "acc": [
+      0.58,
+      0.04
+     ],
+     "latent_nll": [
+      2.34,
+      0.21
+     ]
+    }
+   },
+   "AEVB-IAF": {
+    "pinwheel": {
+     "elbo": [
+      -168.0,
+      0.5
+     ],
+     "acc": [
+      0.9,
+      0.01
+     ],
+     "latent_nll": [
+      1.13,
+      0.03
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -175.0,
+      1.3
+     ],
+     "acc": [
+      0.68,
+      0.02
+     ],
+     "latent_nll": [
+      4.39,
+      0.16
+     ]
+    },
+    "square": {
+     "elbo": [
+      -173.6,
+      0.9
+     ],
+     "acc": [
+      0.82,
+      0.02
+     ],
+     "latent_nll": [
+      1.55,
+      0.03
+     ]
+    }
+   },
+   "AAEB": {
+    "pinwheel": {
+     "elbo": null,
+     "acc": [
+      0.64,
+      0.02
+     ],
+     "latent_nll": [
+      1.54,
+      0.03
+     ]
+    },
+    "swiss_roll": {
+     "elbo": null,
+     "acc": [
+      0.71,
+      0.03
+     ],
+     "latent_nll": [
+      3.09,
+      0.04
+     ]
+    },
+    "square": {
+     "elbo": null,
+     "acc": [
+      0.59,
+      0.01
+     ],
+     "latent_nll": [
+      1.8,
+      0.09
+     ]
+    }
+   },
+   "DDVI": {
+    "pinwheel": {
+     "elbo": [
+      -161.9,
+      0.2
+     ],
+     "acc": [
+      0.85,
+      0.01
+     ],
+     "latent_nll": [
+      1.1,
+      0.01
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -165.8,
+      0.3
+     ],
+     "acc": [
+      0.82,
+      0.01
+     ],
+     "latent_nll": [
+      2.1,
+      0.01
+     ]
+    },
+    "square": {
+     "elbo": [
+      -161.7,
+      0.3
+     ],
+     "acc": [
+      0.82,
+      0.01
+     ],
+     "latent_nll": [
+      1.51,
+      0.01
+     ]
+    }
+   }
+  }
+ },
+ "table7_cifar10_unsupervised": {
+  "description": "Unsupervised CIFAR-10 (3 seeds)",
+  "methods": {
+   "AEVB": {
+    "pinwheel": {
+     "elbo": [
+      -1608.1,
+      40.9
+     ],
+     "latent_nll": [
+      2.32,
+      0.17
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -1522.1,
+      68.2
+     ],
+     "latent_nll": [
+      6.79,
+      0.66
+     ]
+    },
+    "square": {
+     "elbo": [
+      -1578.3,
+      23.0
+     ],
+     "latent_nll": [
+      2.53,
+      2.07
+     ]
+    }
+   },
+   "AEVB-IAF": {
+    "pinwheel": {
+     "elbo": [
+      -1491.2,
+      29.3
+     ],
+     "latent_nll": [
+      1.81,
+      1.13
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -1464.7,
+      35.6
+     ],
+     "latent_nll": [
+      5.24,
+      1.54
+     ]
+    },
+    "square": {
+     "elbo": [
+      -1475.8,
+      37.9
+     ],
+     "latent_nll": [
+      1.54,
+      0.23
+     ]
+    }
+   },
+   "AAEB": {
+    "pinwheel": {
+     "elbo": null,
+     "latent_nll": [
+      1.4,
+      0.21
+     ]
+    },
+    "swiss_roll": {
+     "elbo": null,
+     "latent_nll": [
+      2.86,
+      0.12
+     ]
+    },
+    "square": {
+     "elbo": null,
+     "latent_nll": [
+      1.8,
+      0.32
+     ]
+    }
+   },
+   "H-AEVB": {
+    "pinwheel": {
+     "elbo": [
+      -1401.8,
+      13.9
+     ],
+     "latent_nll": [
+      1.46,
+      0.02
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -1401.4,
+      20.7
+     ],
+     "latent_nll": [
+      5.97,
+      0.14
+     ]
+    },
+    "square": {
+     "elbo": [
+      -1403.6,
+      24.6
+     ],
+     "latent_nll": [
+      1.6,
+      0.05
+     ]
+    }
+   },
+   "PIS (reimplementation)": {
+    "pinwheel": {
+     "elbo": [
+      -1686.6,
+      15.7
+     ],
+     "latent_nll": [
+      1.88,
+      0.02
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -1991.6,
+      179.6
+     ],
+     "latent_nll": [
+      6.01,
+      0.23
+     ]
+    },
+    "square": {
+     "elbo": [
+      -1865.2,
+      101.9
+     ],
+     "latent_nll": [
+      2.72,
+      1.59
+     ]
+    }
+   },
+   "DDVI": {
+    "pinwheel": {
+     "elbo": [
+      -1453.2,
+      24.9
+     ],
+     "latent_nll": [
+      0.97,
+      0.07
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -1548.9,
+      58.7
+     ],
+     "latent_nll": [
+      2.46,
+      0.31
+     ]
+    },
+    "square": {
+     "elbo": [
+      -1363.1,
+      27.2
+     ],
+     "latent_nll": [
+      1.5,
+      0.06
+     ]
+    }
+   }
+  }
+ },
+ "table8_cifar10_semi_supervised": {
+  "description": "Semi-supervised CIFAR-10, 10,000 labels (3 seeds)",
+  "methods": {
+   "AEVB": {
+    "pinwheel": {
+     "elbo": [
+      -2113.7,
+      44.4
+     ],
+     "acc": [
+      0.3,
+      0.07
+     ],
+     "latent_nll": [
+      2.24,
+      0.18
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -2167.4,
+      82.0
+     ],
+     "acc": [
+      0.2,
+      0.07
+     ],
+     "latent_nll": [
+      6.52,
+      2.12
+     ]
+    },
+    "square": {
+     "elbo": [
+      -2125.1,
+      19.1
+     ],
+     "acc": [
+      0.3,
+      0.05
+     ],
+     "latent_nll": [
+      1.94,
+      0.28
+     ]
+    }
+   },
+   "AEVB-IAF": {
+    "pinwheel": {
+     "elbo": [
+      -2090.1,
+      29.9
+     ],
+     "acc": [
+      0.48,
+      0.02
+     ],
+     "latent_nll": [
+      1.6,
+      0.08
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -2093.7,
+      55.8
+     ],
+     "acc": [
+      0.29,
+      0.03
+     ],
+     "latent_nll": [
+      7.09,
+      0.31
+     ]
+    },
+    "square": {
+     "elbo": [
+      -2118.9,
+      21.3
+     ],
+     "acc": [
+      0.35,
+      0.01
+     ],
+     "latent_nll": [
+      1.57,
+      0.04
+     ]
+    }
+   },
+   "AAEB": {
+    "pinwheel": {
+     "elbo": null,
+     "acc": [
+      0.26,
+      0.01
+     ],
+     "latent_nll": [
+      1.7,
+      0.03
+     ]
+    },
+    "swiss_roll": {
+     "elbo": null,
+     "acc": [
+      0.25,
+      0.03
+     ],
+     "latent_nll": [
+      3.17,
+      0.19
+     ]
+    },
+    "square": {
+     "elbo": null,
+     "acc": [
+      0.24,
+      0.02
+     ],
+     "latent_nll": [
+      1.67,
+      0.28
+     ]
+    }
+   },
+   "DDVI": {
+    "pinwheel": {
+     "elbo": [
+      -2053.1,
+      14.9
+     ],
+     "acc": [
+      0.53,
+      0.02
+     ],
+     "latent_nll": [
+      1.07,
+      0.01
+     ]
+    },
+    "swiss_roll": {
+     "elbo": [
+      -2069.3,
+      15.6
+     ],
+     "acc": [
+      0.52,
+      0.02
+     ],
+     "latent_nll": [
+      2.12,
+      0.03
+     ]
+    },
+    "square": {
+     "elbo": [
+      -2065.4,
+      19.3
+     ],
+     "acc": [
+      0.5,
+      0.01
+     ],
+     "latent_nll": [
+      1.5,
+      0.02
+     ]
+    }
+   }
+  }
+ },
+ "table9_sleep_ablation": {
+  "description": "Unsupervised MNIST, Latent NLL, with DDVI without the sleep step (3 seeds)",
+  "methods": {
+   "AEVB": {
+    "pinwheel": {
+     "latent_nll": [
+      1.55,
+      0.59
+     ]
+    },
+    "swiss_roll": {
+     "latent_nll": [
+      5.63,
+      1.72
+     ]
+    },
+    "square": {
+     "latent_nll": [
+      2.93,
+      1.11
+     ]
+    }
+   },
+   "AEVB-IAF": {
+    "pinwheel": {
+     "latent_nll": [
+      1.29,
+      0.4
+     ]
+    },
+    "swiss_roll": {
+     "latent_nll": [
+      3.7,
+      1.97
+     ]
+    },
+    "square": {
+     "latent_nll": [
+      1.72,
+      0.1
+     ]
+    }
+   },
+   "AAEB": {
+    "pinwheel": {
+     "latent_nll": [
+      1.54,
+      0.13
+     ]
+    },
+    "swiss_roll": {
+     "latent_nll": [
+      3.34,
+      0.24
+     ]
+    },
+    "square": {
+     "latent_nll": [
+      2.27,
+      0.87
+     ]
+    }
+   },
+   "H-AEVB": {
+    "pinwheel": {
+     "latent_nll": [
+      1.54,
+      0.11
+     ]
+    },
+    "swiss_roll": {
+     "latent_nll": [
+      2.92,
+      0.45
+     ]
+    },
+    "square": {
+     "latent_nll": [
+      1.67,
+      0.04
+     ]
+    }
+   },
+   "DDVI": {
+    "pinwheel": {
+     "latent_nll": [
+      1.11,
+      0.1
+     ]
+    },
+    "swiss_roll": {
+     "latent_nll": [
+      2.27,
+      0.16
+     ]
+    },
+    "square": {
+     "latent_nll": [
+      1.56,
+      0.01
+     ]
+    }
+   },
+   "DDVI (w/o sleep step)": {
+    "pinwheel": {
+     "latent_nll": [
+      3.29,
+      0.92
+     ]
+    },
+    "swiss_roll": {
+     "latent_nll": [
+      6.99,
+      4.67
+     ]
+    },
+    "square": {
+     "latent_nll": [
+      2.39,
+      0.62
+     ]
+    }
+   }
+  }
+ }
+}

@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# This file follows the adversarial autoencoder implementation of https://github.com/fducau/AAE_pytorch and is
+# therefore distributed under the GNU General Public License v3.0 (licenses/GPL-3.0.txt), unlike the rest of this
+# repository (MIT).
 '''Adversarial autoencoder baselines (AAEB), after https://github.com/fducau/AAE_pytorch. A discriminator on the latents
 (and, semi-supervised, on [z, one-hot label with an extra "unlabeled" class]) matches the aggregate posterior to the
 prior. AAEB has no ELBO.'''

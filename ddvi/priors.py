@@ -12,7 +12,8 @@ from .utils import get_device
 
 
 class GaussianKDE:
-    '''Gaussian kernel density estimate; returns log p(x) for each row of x.'''
+    '''Gaussian kernel density estimate; returns log p(x) for each row of x.
+    Follows GaussianKernel / KernelDensityEstimator of https://github.com/EugenHotaj/pytorch-generative (MIT).'''
     def __init__(self, train_xs, bandwidth):
         self.train_xs = train_xs
         self.bandwidth = bandwidth

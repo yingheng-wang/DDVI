@@ -1,117 +1,110 @@
-# Denoising Diffusion Variational Inference (DDVI)
+# [Denoising Diffusion Variational Inference: Diffusion Models as Expressive Variational Posteriors](https://arxiv.org/abs/2401.02739)
+By [Yingheng Wang](https://yingheng-wang.com/)\*, [Wasu Top Piriyakulkij](https://www.cs.cornell.edu/~wp237/)\*, [Volodymyr Kuleshov](https://www.cs.cornell.edu/~kuleshov/) (\*equal contribution)
 
-Code for [Denoising Diffusion Variational Inference: Diffusion Models as Expressive Variational Posteriors](https://arxiv.org/abs/2401.02739)
-by Wasu Top Piriyakulkij\*, Yingheng Wang\*, and Volodymyr Kuleshov (\* equal contribution).
+[![arXiv](https://img.shields.io/badge/arXiv-2401.02739-b31b1b.svg)](https://arxiv.org/abs/2401.02739)
+[![CPU checks](https://github.com/yingheng-wang/DDVI/actions/workflows/tests.yml/badge.svg)](https://github.com/yingheng-wang/DDVI/actions/workflows/tests.yml)
 
-<p align="center"><img src="imgs/ddvi.png" width="80%"></p>
+![DDVI overview](docs/ddvi_overview.png)
 
-DDVI is an amortized variational inference method for latent variable models that uses a diffusion model as the
-variational posterior: an encoder gives q(y_T | x), a reverse diffusion process q(z | y_T, x) refines y_T into the
-latent z, and a forward diffusion process r(y | z) serves as the auxiliary reverse model of an auxiliary-variable ELBO.
-Training alternates wake steps on (a surrogate of) this ELBO with sleep steps that fit the reverse process to samples
-from the prior p(z) and the decoder.
+Variational inference in latent variable models with structured priors needs posteriors that can match those priors. We introduce ***DDVI*** (**D**enoising **D**iffusion **V**ariational **I**nference), which uses a diffusion model as the variational posterior: an encoder gives q(y_T | x), a reverse diffusion process q(z | y_T, x) iteratively refines y_T into the latent z, and the forward process r(y | z) serves as the auxiliary reverse model of an auxiliary-variable ELBO. Training alternates wake steps on (a surrogate of) this ELBO with sleep steps that fit the reverse process on samples from the prior and the decoder, as in the wake-sleep algorithm. On MNIST and CIFAR-10 with pinwheel, Swiss roll and square priors, DDVI has the lowest Latent NLL in all twelve unsupervised and semi-supervised settings and a higher ELBO than the flow-based AEVB-IAF in eleven of them.
 
-This repository contains the MNIST and CIFAR-10 experiments of the paper (unsupervised and semi-supervised learning with
-structured 2-d priors; Tables 1, 2, 7, 8 and 9) with the final settings.
+In this repo, we provide:
+* **The DDVI framework**
+  1. **DDVI** with an x-conditional reverse process trained by wake-sleep (`model=ddvi`), initialized from the simplified DDVI with an x-independent reverse process (`model=ddvi_simplified`).
+  2. **Semi-supervised DDVI** with one prior denoiser per partition of the prior (`model=ddvi_semi`).
+* **Baselines**: AEVB, AEVB-IAF, H-AEVB, PIS (our reimplementation) and AAEB, and the semi-supervised AEVB, AEVB-IAF and AAEB.
+* **Evaluation**: the ELBO of every method, including the change-of-variables density of DDVI's deterministic DDIM posterior; KNN accuracy, Latent NLL and MMD; aggregation over seeds.
+* **Structured priors**: pinwheel, Swiss roll and square, each with ten partitions for semi-supervised learning.
 
-## Installation
+## Main Results
+
+Unsupervised MNIST (Table 1 of the paper): ELBO (↑, nats per image) and Latent NLL (↓), mean over three seeds.
+
+| Method | Pinwheel ELBO | Pinwheel NLL | Swiss roll ELBO | Swiss roll NLL | Square ELBO | Square NLL |
+|---|---:|---:|---:|---:|---:|---:|
+| AEVB | −169.9 | 1.55 | −174.6 | 5.63 | −172.4 | 2.93 |
+| AEVB-IAF | −159.7 | 1.29 | −170.7 | 3.70 | −160.2 | 1.72 |
+| AAEB | – | 1.54 | – | 3.34 | – | 2.27 |
+| H-AEVB | −154.6 | 1.54 | −158.2 | 2.92 | −155.8 | 1.67 |
+| PIS (reimpl.) | −192.6 | 2.13 | −216.6 | 6.19 | −204.6 | 3.68 |
+| DDVI | **−151.5** | **1.11** | **−155.9** | **2.27** | **−146.6** | **1.56** |
+
+The ELBO follows the evaluation conventions of the paper (Section 5.1); see [docs/REPRODUCING.md](docs/REPRODUCING.md#evaluation). All entries of Tables 1, 2, 7, 8 and 9, with 95% confidence intervals, are in [`results/paper_tables.json`](results/paper_tables.json).
+
+<a name="code-organization"></a>
+## Code Organization
+1. ```train.py```: trains one model from its Hydra config and writes its test-set metrics
+2. ```evaluate_elbo.py```: ELBO of trained runs
+3. ```aggregate.py```: tables over seeds (mean ± 95% confidence interval)
+4. ```ddvi/models/```: DDVI (```ddvi.py```), simplified and semi-supervised DDVI (```ddvi_simplified.py```), and the baselines (```vae.py```, ```pis.py```, ```aae.py```)
+5. ```ddvi/```: data loaders, structured priors and their density estimates, networks, IAF layers, prior diffusion, metrics
+6. ```conf/```: Hydra configs for datasets, priors and models; the model configs hold the paper's hyperparameters
+7. ```scripts/```: one script per table of the paper
+8. ```results/```: the numbers reported in the paper's tables
+9. ```tests/```: CPU checks of every model
+10. ```docs/```: the [reproduction guide](docs/REPRODUCING.md)
+
+<a name="getting_started"></a>
+## Getting Started
+
+Create an environment with the tested dependencies (Python 3.9, PyTorch 1.12.1, CUDA 11.3) and run the CPU checks:
 
 ```bash
-conda create -n ddvi python=3.9
+conda create --name ddvi python=3.9
 conda activate ddvi
 pip install -r requirements.txt
+python -m unittest discover -s tests
 ```
 
-MNIST and CIFAR-10 are downloaded by torchvision into `data/` (`data_dir=...` to change it).
+MNIST and CIFAR-10 are downloaded by torchvision into `data/` on first use (`data_dir=...` to change it).
 
-## Quick start
+Train DDVI on MNIST with the pinwheel prior, in two stages, and compute its ELBO:
 
 ```bash
-# simplified DDVI (x-independent reverse process); also the first training stage of DDVI
-python train.py dataset=mnist model=ddvi_simplified prior=pinwheel seed=0
-# DDVI with the x-conditional reverse process, initialized from the run above
-python train.py dataset=mnist model=ddvi prior=pinwheel seed=0
-# ELBO of the trained model
+python train.py dataset=mnist model=ddvi_simplified prior=pinwheel seed=0   # stage 1
+python train.py dataset=mnist model=ddvi prior=pinwheel seed=0              # stage 2, initialized from stage 1
 python evaluate_elbo.py runs/mnist/ddvi/pinwheel/seed0
 ```
 
-Each run writes to `runs/<dataset>/<model>/<prior>/seed<seed>/`: `config.yaml`, `train.log`, `model.pt`,
-`metrics.json` (test-set KNN accuracy, latent NLL and MMD), `latent.npy` / `latent.png` (test-set latents) and, after
-`evaluate_elbo.py`, `elbo.json`. `python aggregate.py runs` prints mean ± 95% t-interval over seeds for every
-dataset, method and prior.
+Each run writes its config, log, checkpoint, metrics and latents to `runs/<dataset>/<model>/<prior>/seed<seed>/`. Options are Hydra overrides, e.g. `model.kld_weight=0.5` or `run_root=/scratch/runs`. Datasets: `mnist`, `mnist_semi`, `cifar10`, `cifar10_semi`; priors: `pinwheel`, `swiss_roll`, `square`.
 
-Options are Hydra overrides, e.g. `model.kld_weight=0.5`, `model.num_epochs=50`, `run_root=/scratch/runs`.
-
-## Reproducing the paper
-
-| Paper | Script | Seeds |
-|---|---|---|
-| Table 1: unsupervised MNIST | `scripts/table1_mnist.sh` | 3 |
-| Table 2: semi-supervised MNIST (1,000 labels) | `scripts/table2_mnist_semi.sh` | 10 |
-| Table 7: unsupervised CIFAR-10 | `scripts/table7_cifar10.sh` | 3 |
-| Table 8: semi-supervised CIFAR-10 (10,000 labels) | `scripts/table8_cifar10_semi.sh` | 3 |
-| Table 9: DDVI without the sleep step | `scripts/table9_sleep_ablation.sh` | 3 |
-
-The scripts run the jobs one after another; every (method, prior, seed) job is independent, except that `ddvi` starts
-from the `ddvi_simplified` run with the same dataset, prior and seed. Set `LAUNCH` to a command prefix (for example
-`LAUNCH="srun --gres=gpu:1"`) to run each job through a scheduler, or split the loops over GPUs.
-In the semi-supervised tables, all methods with a KL weight use the same KL and classification weight: 0.01 on MNIST
-(Table 2) and 0.5 on CIFAR-10 (Table 8). The unsupervised settings are in `conf/model/`.
-
-| Config (`model=`) | Method in the paper |
+| `model=` | Method |
 |---|---|
-| `aevb`, `aevb_semi` | AEVB (Gaussian posterior) |
-| `aevb_iaf`, `aevb_iaf_semi` | AEVB-IAF (inverse autoregressive flow) |
-| `h_aevb` | H-AEVB (hierarchical posterior) |
-| `pis` | PIS (path integral sampler; our reimplementation) |
-| `aaeb`, `aaeb_semi` | AAEB (adversarial autoencoder) |
-| `ddvi_simplified` | simplified DDVI; first training stage of DDVI |
-| `ddvi` | DDVI (unsupervised, Tables 1, 7, 9) |
-| `ddvi_semi` | DDVI (semi-supervised, Tables 2, 8) |
+| `ddvi` | DDVI (unsupervised) |
+| `ddvi_simplified` | simplified DDVI; first training stage of `ddvi` |
+| `ddvi_semi` | DDVI (semi-supervised) |
+| `aevb`, `aevb_semi` | AEVB |
+| `aevb_iaf`, `aevb_iaf_semi` | AEVB-IAF |
+| `h_aevb` | H-AEVB |
+| `pis` | PIS (our reimplementation) |
+| `aaeb`, `aaeb_semi` | AAEB |
 
-Priors (`prior=`): `pinwheel`, `swiss_roll`, `square`. Datasets (`dataset=`): `mnist`, `mnist_semi`, `cifar10`,
-`cifar10_semi`.
+## Reproducing Experiments
 
-## Evaluation
+Each table of the paper has a script that trains every method, prior and seed, evaluates the ELBO and prints the table:
 
-- **Accuracy**: a 20-nearest-neighbor classifier fitted on the latents of the training images, evaluated on the test
-  latents.
-- **Latent NLL**: −E_{z∼p(z)}[log q(z)], with q(z) a Gaussian kernel density estimate of the test latents; it measures
-  how well the aggregate posterior covers the prior.
-- **MMD** between the test images and images decoded from 10,000 prior samples.
-- **ELBO** (`evaluate_elbo.py`), in nats per image: E_q[log p(x|z) + log p(z) − log q(z|x)], minus KL(q(l|x) || p(l))
-  in the semi-supervised setting. MNIST uses a Bernoulli decoder; CIFAR-10 a Gaussian decoder whose variance is
-  fitted by maximum likelihood on the training set for each model. log p(z) is the kernel density estimate of the prior
-  (`ddvi/priors.py`) that is also used in training. log q(z|x) is the Gaussian / flow density for AEVB and AEVB-IAF;
-  for DDVI, the deterministic DDIM map z = F_x(y_T) gives log q(z|x) = log q(y_T|x) − log |det ∂F_x/∂y_T| (2 × 2
-  Jacobian by autograd); H-AEVB and PIS use their auxiliary-variable and path-space bounds.
-  As in the paper, the values follow common conventions under which they are not guaranteed lower bounds on log p(x):
-  the MNIST Bernoulli likelihood is applied to grey-level pixels, the prior KDE log-density is clipped, the DDIM map is
-  assumed to be injective, and the terms are conditional on the dropout masks where dropout is active at evaluation.
-
-`val_split=5000` holds out 5,000 training images as a validation set that replaces the test set in training-time
-evaluation, metrics and ELBO; we used it to choose the DDVI configuration.
-
-## Code layout
-
+```bash
+bash scripts/table1_mnist.sh          # Table 1: unsupervised MNIST
+bash scripts/table2_mnist_semi.sh     # Table 2: semi-supervised MNIST, 1,000 labels
+bash scripts/table7_cifar10.sh        # Table 7: unsupervised CIFAR-10
+bash scripts/table8_cifar10_semi.sh   # Table 8: semi-supervised CIFAR-10, 10,000 labels
+bash scripts/table9_sleep_ablation.sh # Table 9: DDVI without the sleep step
 ```
-train.py              training + metrics          ddvi/models/ddvi.py              DDVI (x-conditional reverse process)
-evaluate_elbo.py      ELBO evaluation             ddvi/models/ddvi_simplified.py   simplified and semi-supervised DDVI
-aggregate.py          tables over seeds           ddvi/models/{vae,pis,aae}.py     baselines
-conf/                 Hydra configs               ddvi/{data,priors,nets,flows,diffusion,metrics}.py
-scripts/              one script per table
-```
+
+The jobs are independent and run one after another; set `LAUNCH` to a command prefix (e.g. `LAUNCH="srun --gres=gpu:1"`) to dispatch each one to a scheduler. The [reproduction guide](docs/REPRODUCING.md) gives the per-table settings, run times, output files and the evaluation protocol.
+
+## Acknowledgements
+The MADE and IAF layers adapt [pytorch-made](https://github.com/karpathy/pytorch-made) and [iaf-vae](https://github.com/pclucas14/iaf-vae), the kernel density estimate follows [pytorch-generative](https://github.com/EugenHotaj/pytorch-generative), and the AAE baseline follows [AAE_pytorch](https://github.com/fducau/AAE_pytorch). See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Citation
-
 ```bibtex
 @inproceedings{piriyakulkij-wang:aaai25,
-  Author = {Piriyakulkij, Wasu Top and Wang, Yingheng and Kuleshov, Volodymyr},
-  Booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
-  Title = {Denoising Diffusion Variational Inference: Diffusion Models as Expressive Variational Posteriors},
-  Year = {2025}}
+  title     = {Denoising Diffusion Variational Inference: Diffusion Models as Expressive Variational Posteriors},
+  author    = {Piriyakulkij, Wasu Top and Wang, Yingheng and Kuleshov, Volodymyr},
+  booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  year      = {2025}
+}
 ```
 
 ## License
-
-MIT (see `LICENSE`).
+New code is released under the MIT License. `ddvi/models/aae.py`, which follows AAE_pytorch, is distributed under GPL-3.0; see [LICENSE](LICENSE), [licenses/GPL-3.0.txt](licenses/GPL-3.0.txt) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). MNIST and CIFAR-10 are not covered and must be obtained under their own terms.
