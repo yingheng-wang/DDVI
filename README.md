@@ -2,6 +2,7 @@
 By [Yingheng Wang](https://yingheng-wang.com/)\*, [Wasu Top Piriyakulkij](https://www.cs.cornell.edu/~wp237/)\*, [Volodymyr Kuleshov](https://www.cs.cornell.edu/~kuleshov/) (\*equal contribution)
 
 [![arXiv](https://img.shields.io/badge/arXiv-2401.02739-b31b1b.svg)](https://arxiv.org/abs/2401.02739)
+[![Project Page](https://img.shields.io/badge/Project-Page-blue.svg)](https://yingheng-wang.com/DDVI/)
 [![CPU checks](https://github.com/yingheng-wang/DDVI/actions/workflows/tests.yml/badge.svg)](https://github.com/yingheng-wang/DDVI/actions/workflows/tests.yml)
 
 ![DDVI overview](docs/ddvi_overview.png)
