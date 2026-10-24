@@ -1,13 +1,16 @@
-'''Exact ELBO of trained models on the test set (or on the validation set if the run used val_split):
+'''ELBO of trained models on the test set (or on the validation set if the run used val_split):
     ELBO = E_q[log p(x|z)] + E_q[log p(z)] - E_q[log q(z|x)]   (semi-supervised: - KL(q(l|x) || p(l)) as well)
 single-sample estimate per test example, averaged over the test set, in nats per image.
 - log p(x|z): MNIST, Bernoulli decoder (minus the BCE summed over the 784 pixels). CIFAR-10, Gaussian decoder
   N(x; x_hat(z), s^2 I) with one variance per trained model, fitted by maximum likelihood on the training set
   (s^2 = mean per-pixel squared error under q).
 - log p(z): the KDE prior density (priors.py), also used in training.
-- log q: exact for AEVB (Gaussian), AEVB-IAF (IAF log-det) and DDVI (deterministic DDIM map, autograd 2x2 log-det);
-  auxiliary-variable bound for H-AEVB (reverse model N(0, I) for z1); Girsanov path bound for PIS. Semi-supervised:
-  q(l|x) q(z|x[, l]) with uniform p(l).
+- log q: Gaussian / flow density for AEVB and AEVB-IAF (IAF log-det); for DDVI, change of variables through the
+  deterministic DDIM map (autograd 2x2 log-det), assuming the map is injective; auxiliary-variable bound for H-AEVB
+  (reverse model N(0, I) for z1); Girsanov path bound for PIS. Semi-supervised: q(l|x) q(z|x[, l]) with uniform p(l).
+As in the paper, these are not guaranteed lower bounds on log p(x): the MNIST Bernoulli likelihood is applied to
+grey-level pixels, the prior KDE log-density is clipped, and the terms are conditional on the dropout masks where
+dropout is active at evaluation.
 Usage: python evaluate_elbo.py RUN_DIR [RUN_DIR ...]   (writes RUN_DIR/elbo.json)'''
 import json
 import math

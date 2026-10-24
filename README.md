@@ -31,7 +31,7 @@ MNIST and CIFAR-10 are downloaded by torchvision into `data/` (`data_dir=...` to
 python train.py dataset=mnist model=ddvi_simplified prior=pinwheel seed=0
 # DDVI with the x-conditional reverse process, initialized from the run above
 python train.py dataset=mnist model=ddvi prior=pinwheel seed=0
-# exact ELBO of the trained model
+# ELBO of the trained model
 python evaluate_elbo.py runs/mnist/ddvi/pinwheel/seed0
 ```
 
@@ -82,9 +82,12 @@ Priors (`prior=`): `pinwheel`, `swiss_roll`, `square`. Datasets (`dataset=`): `m
 - **ELBO** (`evaluate_elbo.py`), in nats per image: E_q[log p(x|z) + log p(z) − log q(z|x)], minus KL(q(l|x) || p(l))
   in the semi-supervised setting. MNIST uses a Bernoulli decoder; CIFAR-10 a Gaussian decoder whose variance is
   fitted by maximum likelihood on the training set for each model. log p(z) is the kernel density estimate of the prior
-  (`ddvi/priors.py`) that is also used in training. log q(z|x) is exact for AEVB, AEVB-IAF and DDVI (for DDVI, the
-  deterministic DDIM map z = F_x(y_T) gives log q(z|x) = log q(y_T|x) − log |det ∂F_x/∂y_T|); H-AEVB and PIS use
-  their auxiliary-variable and path-space bounds.
+  (`ddvi/priors.py`) that is also used in training. log q(z|x) is the Gaussian / flow density for AEVB and AEVB-IAF;
+  for DDVI, the deterministic DDIM map z = F_x(y_T) gives log q(z|x) = log q(y_T|x) − log |det ∂F_x/∂y_T| (2 × 2
+  Jacobian by autograd); H-AEVB and PIS use their auxiliary-variable and path-space bounds.
+  As in the paper, the values follow common conventions under which they are not guaranteed lower bounds on log p(x):
+  the MNIST Bernoulli likelihood is applied to grey-level pixels, the prior KDE log-density is clipped, the DDIM map is
+  assumed to be injective, and the terms are conditional on the dropout masks where dropout is active at evaluation.
 
 `val_split=5000` holds out 5,000 training images as a validation set that replaces the test set in training-time
 evaluation, metrics and ELBO; we used it to choose the DDVI configuration.
@@ -93,7 +96,7 @@ evaluation, metrics and ELBO; we used it to choose the DDVI configuration.
 
 ```
 train.py              training + metrics          ddvi/models/ddvi.py              DDVI (x-conditional reverse process)
-evaluate_elbo.py      exact ELBO                  ddvi/models/ddvi_simplified.py   simplified and semi-supervised DDVI
+evaluate_elbo.py      ELBO evaluation             ddvi/models/ddvi_simplified.py   simplified and semi-supervised DDVI
 aggregate.py          tables over seeds           ddvi/models/{vae,pis,aae}.py     baselines
 conf/                 Hydra configs               ddvi/{data,priors,nets,flows,diffusion,metrics}.py
 scripts/              one script per table
